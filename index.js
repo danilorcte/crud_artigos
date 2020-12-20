@@ -2,6 +2,8 @@ const express = require('express')
 const app = express();
 const bodyParser = require('body-parser')
 const connection = require("./database/database");
+const session = require('express-session')
+
 
 const categoriesController1 = require('./categories/CategoriesController')
 const articlesController = require("./articles/ArticlesController")
@@ -14,6 +16,16 @@ const User = require('./users/Users')
 
 // view engined
 app.set('view engine', 'ejs')
+
+//Redis - banco de dados para cache e sessoes
+
+//session
+app.use(session({
+    //texto para aumentar seguranca da sessao - criptografia
+    secret: "Ahudsflsajfplkdfjsa@ES", 
+
+    cookie:{maxAge: 30000} //maxAge em ms. (30 seg)
+}))
 
 //static
 app.use(express.static('public'))
@@ -35,6 +47,27 @@ connection
 app.use('/', categoriesController1);
 app.use('/', articlesController);
 app.use('/', usersController);
+
+app.get('/session', (req, res) => {
+    req.session.treinamento ='Formação node js'
+    req.session.ano = 2020
+    req.session.email = 'danilo.rcte@gmail.com'
+    req.session.user = {
+        username: 'danilorcte',
+        email: 'danilo.rcte@gmail.com',
+        id: 10
+    }
+    res.send('sessao gerada')
+})
+
+app.get('/leitura', (req, res) => {
+    res.json({
+        treinamento: req.session.treinamento,
+        ano: req.session.ano,
+        email: req.session.email,
+        user: req.session.user
+    })
+})
 
 app.get('/', (req, res) => {
     Article.findAll({

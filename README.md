@@ -24,3 +24,10 @@ instalar e configurar o tinymce
 </script>
 
 ############################################################
+
+HASH PARA SENHA
+BCRYPTJS - BIBLIOTECA PARA GERAR HASH PARA SENHAS
+
+########################################################
+Para sessões de usuários utilizar biblioteca
+npm install express-session

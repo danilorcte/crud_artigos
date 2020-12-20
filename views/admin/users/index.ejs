@@ -1,0 +1,46 @@
+<%- include ('../../partials/header.ejs')%>
+<body>
+    <%- include ('../../partials/navbar.ejs')%>
+    <div class="container">
+        <hr>
+        <h2>Usuários</h2>
+        <a class="btn btn-success" href="/admin/users/create">Criar novo Usuário</a>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>E-mail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => {%>
+                    <tr>
+                        <th><%=user.id%></th>
+                        <th><%=user.email%></th>
+                        <th>
+                            <a href="/admin/users/edit/<%=user.id%>" class="btn btn-warning">Editar</a>
+
+                            <form method="POST" action="/categories/delete" style="display: inline;" onsubmit="confirmDelete(event, this)">
+                                <input type="hidden" name="id" value="<%=user.id%>">
+                                <button class="btn btn-danger">Exluir</button>
+                            </form> 
+                        </th>                    
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+    </div>
+    
+</body>
+<%- include ('../../partials/footer.ejs')%>
+<script>
+    function confirmDelete(event, form){
+        event.preventDefault();
+        var decision = confirm("Deseja realmente deletar o registro?")
+        if(decision){
+            form.submit();
+        }
+}
+</script>
